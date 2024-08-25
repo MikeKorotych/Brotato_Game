@@ -1,0 +1,4 @@
+repository "Brotato_Course@mixakievchanen@cloud"
+  path "/"
+    br "/main"
+    co "/main"

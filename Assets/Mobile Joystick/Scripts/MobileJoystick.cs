@@ -20,11 +20,6 @@ public class MobileJoystick : MonoBehaviour
         HideJoystick();
     }
 
-    private void OnDisable()
-    {
-        HideJoystick();
-    }
-
     // Update is called once per frame
     void Update()
     {

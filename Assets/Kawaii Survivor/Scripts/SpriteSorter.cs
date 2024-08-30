@@ -16,6 +16,6 @@ public class SpriteSorter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        spriteRenderer.sortingOrder = -(int)(transform.position.y * 10);
+       // spriteRenderer.sortingOrder = -(int)(transform.position.y * 10);
     }
 }

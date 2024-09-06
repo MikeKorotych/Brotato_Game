@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8384367181380695591}
   - component: {fileID: 1079554908523270324}
   - component: {fileID: 1798687275085838140}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FadeOut Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}

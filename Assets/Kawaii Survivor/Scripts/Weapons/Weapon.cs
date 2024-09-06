@@ -1,9 +1,13 @@
+using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
 
+    [Header(" Elements ")]
+    [SerializeField] private Transform hitDetectionTransform;
+    [SerializeField] private float hitDetectionRadius;
 
     [Header(" Settings ")]
     [SerializeField] private float range;
@@ -16,6 +20,18 @@ public class Weapon : MonoBehaviour
     void Update()
     {
         AutoAim();
+
+        Attack();
+    }
+
+    private void Attack()
+    {
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(hitDetectionTransform.position, hitDetectionRadius, enemyMask);
+
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            Destroy(enemies[i].gameObject);
+        }
     }
 
     private void AutoAim()
@@ -61,5 +77,8 @@ public class Weapon : MonoBehaviour
     {
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, range);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(hitDetectionTransform.position, hitDetectionRadius);
     }
 }

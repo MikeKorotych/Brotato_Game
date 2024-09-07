@@ -1,4 +1,7 @@
+using TMPro;
 using UnityEngine;
+using System;
+
 
 [RequireComponent(typeof(EnemyMovement))]
 public class Enemy : MonoBehaviour
@@ -13,6 +16,7 @@ public class Enemy : MonoBehaviour
     [Header(" Spawn Sequence Related ")]
     [SerializeField] private SpriteRenderer renderer;
     [SerializeField] private SpriteRenderer spawnIndicator;
+    [SerializeField] private Collider2D collider;
     private bool hasSpawned;
 
     [Header(" Attack ")]
@@ -22,14 +26,26 @@ public class Enemy : MonoBehaviour
     private float attackDelay;
     private float attackTimer;
 
+    [Header(" Health ")]
+    [SerializeField] private TextMeshPro healthText;
+    [SerializeField] private int maxHealth;
+    private int health;
+
     [Header(" Effects ")]
     [SerializeField] private ParticleSystem passAwayParticles;
 
     [Header(" Debug ")]
     [SerializeField] private bool drawGizmos = true;
 
+
+    [Header(" Actions ")]
+    public static Action<int, Vector2> onDamageTaken;
+
     void Start()
     {
+        health = maxHealth;
+        healthText.text = health.ToString();
+
         SetRenederersVisibility(false);
         SpawnAnimation();
 
@@ -67,6 +83,8 @@ public class Enemy : MonoBehaviour
         SetRenederersVisibility(true);
         hasSpawned = true;
 
+        collider.enabled = true;
+
         movement.StorePlayer(player);
     }
 
@@ -93,6 +111,19 @@ public class Enemy : MonoBehaviour
         player.TakeDamage(damage);
     }
 
+    public void TakeDamage(int damage)
+    {
+        int realDamage = Mathf.Min(damage, health);
+        health -= realDamage;
+
+        healthText.text = health.ToString();
+
+        onDamageTaken.Invoke(damage, transform.position);
+
+        if(health <= 0)
+            PassAway();
+    }
+
     private void PassAway()
     {
         passAwayParticles.transform.SetParent(null);
@@ -111,5 +142,6 @@ public class Enemy : MonoBehaviour
         if (!drawGizmos) return;
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, meleeAttackDistance);
+
     }
 }

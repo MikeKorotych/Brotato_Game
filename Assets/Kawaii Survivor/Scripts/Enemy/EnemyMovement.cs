@@ -11,8 +11,8 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
-        if (player != null)
-            FollowPlayer();
+        //if (player != null)
+        //    FollowPlayer();
     }
 
     public void StorePlayer(Player player)
@@ -20,7 +20,7 @@ public class EnemyMovement : MonoBehaviour
         this.player = player;
     }
 
-    private void FollowPlayer()
+    public void FollowPlayer()
     {
         if (player == null) return;
         transform.position = Vector3.MoveTowards(transform.position, player.transform.position, Time.deltaTime * moveSpeed);

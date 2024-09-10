@@ -4,6 +4,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [Header(" Elements ")]
+    [SerializeField] private CircleCollider2D collider;
     private PlayerHealth playerHealth => GetComponent<PlayerHealth>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -22,4 +23,10 @@ public class Player : MonoBehaviour
     {
         playerHealth.TakeDamage(damage);
     }
+
+    public Vector2 GetCenter()
+    {
+        return collider.bounds.center;
+    }
+
 }

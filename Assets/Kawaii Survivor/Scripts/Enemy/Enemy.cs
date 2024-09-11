@@ -1,69 +1,55 @@
 using System;
 using UnityEngine;
 
-
-[RequireComponent(typeof(EnemyMovement))]
-public class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour
 {
 
     [Header(" Components ")]
-    private EnemyMovement movement => GetComponent<EnemyMovement>();
-
-    [Header(" Elements ")]
-    Player player => FindFirstObjectByType<Player>();
-
-    [Header(" Spawn Sequence Related ")]
-    [SerializeField] private SpriteRenderer renderer;
-    [SerializeField] private SpriteRenderer spawnIndicator;
-    [SerializeField] private Collider2D collider;
-    private bool hasSpawned;
-
-    [Header(" Attack ")]
-    [SerializeField] private int damage;
-    [SerializeField] private float attackFrequency;
-    [SerializeField] private float meleeAttackDistance = .3f;
-    private float attackDelay;
-    private float attackTimer;
+    protected EnemyMovement movement => GetComponent<EnemyMovement>();
 
     [Header(" Health ")]
-    [SerializeField] private int maxHealth;
-    private int health;
+    [SerializeField] protected int maxHealth;
+    protected int health;
+
+    [Header(" Elements ")]
+    protected Player player => FindFirstObjectByType<Player>();
+
+    [Header(" Spawn Sequence Related ")]
+    [SerializeField] protected SpriteRenderer renderer;
+    [SerializeField] protected SpriteRenderer spawnIndicator;
+    [SerializeField] protected Collider2D collider;
+    protected bool hasSpawned;
+
+    [Header(" Attack ")]
+    [SerializeField] protected float playerDetectionRadius;
 
     [Header(" Effects ")]
-    [SerializeField] private ParticleSystem passAwayParticles;
-
-    [Header(" Debug ")]
-    [SerializeField] private bool drawGizmos = true;
-
+    [SerializeField] protected ParticleSystem passAwayParticles;
 
     [Header(" Actions ")]
     public static Action<int, Vector2> onDamageTaken;
 
-    void Start()
+    [Header(" Debug ")]
+    [SerializeField] protected bool drawGizmos = true;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    protected virtual void Start()
     {
         health = maxHealth;
 
+        StartSpawnSequence();
+    }
+
+    // Update is called once per frame
+    protected bool CanAttack()
+    {
+        return renderer.enabled;
+    }
+
+    private void StartSpawnSequence()
+    {
         SetRenederersVisibility(false);
-        SpawnAnimation();
 
-        attackDelay = 1f / attackFrequency;
-    }
-
-    void Update()
-    {
-        if (!renderer.enabled)
-            return;
-
-        if (attackTimer >= attackDelay)
-            TryAttack();
-        else
-            Wait();
-
-        movement.FollowPlayer();
-    }
-
-    private void SpawnAnimation()
-    {
         // scale up and down
         Vector3 originalScale = spawnIndicator.transform.localScale;
 
@@ -96,21 +82,6 @@ public class Enemy : MonoBehaviour
         spawnIndicator.enabled = !visible;
     }
 
-    private void TryAttack()
-    {
-        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
-
-        if (distanceToPlayer <= meleeAttackDistance)
-            Attack();
-    }
-
-    private void Attack()
-    {
-        attackTimer = 0;
-
-        player.TakeDamage(damage);
-    }
-
     public void TakeDamage(int damage)
     {
         int realDamage = Mathf.Min(damage, health);
@@ -121,7 +92,6 @@ public class Enemy : MonoBehaviour
         if (health <= 0)
             PassAway();
     }
-
     private void PassAway()
     {
         passAwayParticles.transform.SetParent(null);
@@ -129,16 +99,10 @@ public class Enemy : MonoBehaviour
 
         Destroy(gameObject);
     }
-
-    private void Wait()
-    {
-        attackTimer += Time.deltaTime;
-    }
-
     private void OnDrawGizmos()
     {
         if (!drawGizmos) return;
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, meleeAttackDistance);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, playerDetectionRadius);
     }
 }

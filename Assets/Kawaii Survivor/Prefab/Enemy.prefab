@@ -359,10 +359,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1328426424544569}
-  - component: {fileID: 1736710839042575129}
   - component: {fileID: 6617170856031312755}
   - component: {fileID: 8822437173512895659}
-  m_Layer: 0
+  - component: {fileID: 2557848699375947750}
+  m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -388,27 +388,6 @@ Transform:
   - {fileID: 2983466919345674625}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1736710839042575129
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7057992453726417165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 550de022804ca6f4aad4efd8b554c49a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  renderer: {fileID: 8094970239216705696}
-  spawnIndicator: {fileID: 6310843399895383953}
-  collider: {fileID: 8822437173512895659}
-  damage: 2
-  attackFrequency: 2
-  meleeAttackDistance: 1
-  maxHealth: 10
-  passAwayParticles: {fileID: 6455611239964962380}
-  drawGizmos: 1
 --- !u!114 &6617170856031312755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,6 +437,27 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: -0.06, y: 0.51}
   m_Radius: 0.48
+--- !u!114 &2557848699375947750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7057992453726417165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 104d6e29fedd14540a073d17759d1074, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 10
+  renderer: {fileID: 8094970239216705696}
+  spawnIndicator: {fileID: 6310843399895383953}
+  collider: {fileID: 8822437173512895659}
+  playerDetectionRadius: 1
+  passAwayParticles: {fileID: 6455611239964962380}
+  drawGizmos: 1
+  damage: 2
+  attackFrequency: 1
 --- !u!1001 &6299877546509893368
 PrefabInstance:
   m_ObjectHideFlags: 0

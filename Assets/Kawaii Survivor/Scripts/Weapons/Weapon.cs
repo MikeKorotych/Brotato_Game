@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,13 +21,13 @@ public class Weapon : MonoBehaviour
     [SerializeField] private LayerMask enemyMask;
 
     [Header(" Attack ")]
-    [SerializeField] private int damage;
-    [SerializeField] private float attackDelay;
-    private float attackTimer;
+    [SerializeField] protected int damage;
+    [SerializeField] protected float attackDelay;
+    protected float attackTimer;
     private List<Enemy> damagedEnemies = new List<Enemy>();
 
     [Header(" Animations ")]
-    [SerializeField] private float aimLerp;
+    [SerializeField] protected float aimLerp;
     [SerializeField] private Animator animator;
 
     private void Start()
@@ -74,9 +73,9 @@ public class Weapon : MonoBehaviour
     private void Attack()
     {
         //Collider2D[] enemies = Physics2D.OverlapCircleAll(hitDetectionTransform.position, hitDetectionRadius, enemyMask);
-        Collider2D[] enemies = Physics2D.OverlapBoxAll(hitDetectionTransform.position, 
-            hitCollider.bounds.size, 
-            hitDetectionTransform.transform.localEulerAngles.z, 
+        Collider2D[] enemies = Physics2D.OverlapBoxAll(hitDetectionTransform.position,
+            hitCollider.bounds.size,
+            hitDetectionTransform.transform.localEulerAngles.z,
             enemyMask);
 
         for (int i = 0; i < enemies.Length; i++)
@@ -126,7 +125,7 @@ public class Weapon : MonoBehaviour
         attackTimer += Time.deltaTime;
     }
 
-    public Enemy GetClosestEnemy()
+    protected Enemy GetClosestEnemy()
     {
         Enemy closestEnemy = null;
         Vector2 targetUpVector = Vector2.up;
@@ -158,6 +157,8 @@ public class Weapon : MonoBehaviour
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, range);
 
+        if (hitCollider == null)
+            return;
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(hitDetectionTransform.position, hitDetectionRadius);
     }

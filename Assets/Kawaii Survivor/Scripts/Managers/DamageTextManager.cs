@@ -13,12 +13,12 @@ public class DamageTextManager : MonoBehaviour
 
     private void Awake()
     {
-        MeleeEnemy.onDamageTaken += EnemyHitCallback;
+        Enemy.onDamageTaken += EnemyHitCallback;
     }
 
     private void OnDestroy()
     {
-        MeleeEnemy.onDamageTaken -= EnemyHitCallback;
+        Enemy.onDamageTaken -= EnemyHitCallback;
     }
 
     // Start вызывается перед первым кадром
@@ -46,7 +46,7 @@ public class DamageTextManager : MonoBehaviour
         Destroy(damageText.gameObject);
     }
 
-    private void EnemyHitCallback(int damage, Vector2 enemyPos)
+    private void EnemyHitCallback(int damage, Vector2 enemyPos, bool isCriticalHit)
     {
         DamageText damageTextInstance = damageTextPool.Get();
 
@@ -59,7 +59,7 @@ public class DamageTextManager : MonoBehaviour
         damageTextInstance.transform.localScale = new Vector2(randomScale, randomScale);
 
         //play animation
-        damageTextInstance.PlayAnimation(damage);
+        damageTextInstance.PlayAnimation(damage, isCriticalHit);
 
         LeanTween.delayedCall(1, () => damageTextPool.Release(damageTextInstance));
     }

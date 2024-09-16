@@ -361,7 +361,7 @@ GameObject:
   - component: {fileID: 1328426424544569}
   - component: {fileID: 6617170856031312755}
   - component: {fileID: 8822437173512895659}
-  - component: {fileID: 2557848699375947750}
+  - component: {fileID: 5784636363370848394}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
@@ -437,7 +437,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: -0.06, y: 0.51}
   m_Radius: 0.48
---- !u!114 &2557848699375947750
+--- !u!114 &5784636363370848394
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -446,17 +446,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 7057992453726417165}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 104d6e29fedd14540a073d17759d1074, type: 3}
+  m_Script: {fileID: 11500000, guid: 07c2aa83ad4b0ee40819c66340d73c0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 10
   renderer: {fileID: 8094970239216705696}
   spawnIndicator: {fileID: 6310843399895383953}
   collider: {fileID: 8822437173512895659}
-  playerDetectionRadius: 1
+  playerDetectionRadius: 1.5
   passAwayParticles: {fileID: 6455611239964962380}
   drawGizmos: 1
-  damage: 2
+  damage: 1
   attackFrequency: 1
 --- !u!1001 &6299877546509893368
 PrefabInstance:

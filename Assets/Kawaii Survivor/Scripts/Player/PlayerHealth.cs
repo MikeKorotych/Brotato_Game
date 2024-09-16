@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,12 +5,9 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-
-
     [Header(" Settings ")]
     [SerializeField] private int maxHealth;
     private int health;
-
 
     [Header(" Elements ")]
     [SerializeField] private Slider healthSlider;
@@ -63,6 +59,7 @@ public class PlayerHealth : MonoBehaviour
     private void PassAway()
     {
         Debug.Log("--- dead ---");
+        LeanTween.cancelAll();
         SceneManager.LoadScene(0);
     }
 }

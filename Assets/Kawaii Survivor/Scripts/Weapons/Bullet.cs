@@ -11,6 +11,10 @@ public class Bullet : MonoBehaviour
     [Header(" Settings ")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private LayerMask enemyMask;
+    private RangeWeapon rangeWeapon;
+    private Enemy target;
+
+    private bool isCriticalHit;
     private int damage;
 
     private void Awake()
@@ -33,25 +37,57 @@ public class Bullet : MonoBehaviour
         
     }
 
-    public void Shoot(int damage, Vector2 direction)
+    public void Cofigure(RangeWeapon rangeWeapon)
     {
+        this.rangeWeapon = rangeWeapon;
+    }
+
+    public void Shoot(int damage, Vector2 direction, bool isCriticalHit)
+    {
+        Invoke("Release", 1);
+
         this.damage = damage;
+        this.isCriticalHit = isCriticalHit;
+
         transform.right = direction;
         rig.linearVelocity = direction * moveSpeed;
     }
 
+    public void Reload()
+    {
+        target = null;
+
+        rig.linearVelocity = Vector2.zero;
+        collider.enabled = true;
+    }
+
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        if (target != null)
+            return;
+
         if (IsInLayerMask(collider.gameObject.layer, enemyMask))
         {
-            Attack(collider.GetComponent<Enemy>());
-            Destroy(gameObject);
+            target = collider.GetComponent<Enemy>();
+
+            CancelInvoke();
+
+            Attack(target);
+            Release();
         }
+    }
+
+    private void Release()
+    {
+        if (!gameObject.activeSelf)
+            return;
+
+        rangeWeapon.ReleaseBullet(this);
     }
 
     private void Attack(Enemy enemy)
     {
-        enemy.TakeDamage(damage);
+        enemy.TakeDamage(damage, isCriticalHit);
     }
 
     private bool IsInLayerMask(int layer, LayerMask layerMask)

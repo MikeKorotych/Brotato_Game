@@ -1,43 +1,55 @@
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class RangeWeapon : Weapon
 {
-
-
     [Header(" Elements ")]
     [SerializeField] private Bullet bulletPrefab;
     [SerializeField] private Transform shootingPoint;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
 
-    }
-
-    // Update is called once per frame
+    [Header(" Pooling ")]
+    private ObjectPool<Bullet> bulletPool;
     void Update()
     {
         AutoAim();
     }
 
-    private void AutoAim()
+    void Start()
     {
-        Enemy closestEnemy = GetClosestEnemy();
-
-        Vector2 targetUpVector = Vector2.up;
-
-        if (closestEnemy != null)
-        {
-            targetUpVector = (closestEnemy.transform.position - transform.position).normalized;
-            transform.up = targetUpVector;
-            ManageShooting();
-
-            return;
-        }
-
-        transform.up = Vector3.Lerp(transform.up, targetUpVector, Time.deltaTime * aimLerp);
+        bulletPool = new ObjectPool<Bullet>(CreateAction, ActionOnGet, ActionOnRelease, ActionOnDestroy);
     }
 
-    private void ManageShooting()
+    private Bullet CreateAction()
+    {
+        Bullet bulletInstance = Instantiate(bulletPrefab, shootingPoint.position, Quaternion.identity);
+        bulletInstance.Cofigure(this);
+
+        return bulletInstance;
+    }
+
+    private void ActionOnGet(Bullet bullet)
+    {
+        bullet.Reload();
+        bullet.transform.position = shootingPoint.position;
+        bullet.gameObject.SetActive(true);
+    }
+
+    private void ActionOnRelease(Bullet bullet)
+    {
+        bullet.gameObject.SetActive(false);
+    }
+
+    public void ReleaseBullet(Bullet bullet)
+    {
+        bulletPool.Release(bullet);
+    }
+
+    private void ActionOnDestroy(Bullet bullet)
+    {
+        Destroy(bullet.gameObject);
+    }
+
+    protected override void ManageAttack()
     {
         attackTimer += Time.deltaTime;
 
@@ -50,9 +62,10 @@ public class RangeWeapon : Weapon
 
     private void Shoot()
     {
-        Bullet bulletInstance = Instantiate(bulletPrefab, shootingPoint.position, Quaternion.identity);
-        bulletInstance.Shoot(damage, transform.up);
-        bulletInstance.transform.position = shootingPoint.position;
-        bulletInstance.gameObject.SetActive(true);
+        int damage = GetDamage(out bool isCriticalHit);
+
+        Bullet bulletInstance = bulletPool.Get();
+        bulletInstance.Shoot(damage, transform.up, isCriticalHit);
+
     }
 }

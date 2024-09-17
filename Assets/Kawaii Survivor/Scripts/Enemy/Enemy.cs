@@ -28,6 +28,7 @@ public abstract class Enemy : MonoBehaviour
 
     [Header(" Actions ")]
     public static Action<int, Vector2, bool> onDamageTaken;
+    public static Action<Vector2> onPassedAway;
 
     [Header(" Debug ")]
     [SerializeField] protected bool drawGizmos = true;
@@ -94,6 +95,8 @@ public abstract class Enemy : MonoBehaviour
     }
     private void PassAway()
     {
+        onPassedAway?.Invoke(transform.position);
+
         passAwayParticles.transform.SetParent(null);
         passAwayParticles.Play();
 

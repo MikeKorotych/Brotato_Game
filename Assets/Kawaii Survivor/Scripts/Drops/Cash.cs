@@ -1,11 +1,10 @@
 using System;
 using UnityEngine;
 
-public class Candy : DroppableCurrency
+public class Cash : DroppableCurrency
 {
-
     [Header(" Actions ")]
-    public static Action<Candy> onCollected;
+    public static Action<Cash> onCollected;
 
     protected override void Collected()
     {

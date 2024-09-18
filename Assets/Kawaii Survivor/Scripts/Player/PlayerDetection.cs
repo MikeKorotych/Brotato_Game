@@ -4,7 +4,7 @@ public class PlayerDetection : MonoBehaviour
 {
 
     [Header(" Elements ")]
-    [SerializeField] CircleCollider2D playerCollider;
+    [SerializeField] CircleCollider2D collectableCollider;
 
     //private void FixedUpdate()
     //{
@@ -21,12 +21,12 @@ public class PlayerDetection : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.TryGetComponent(out Candy candy))
+        if (collider.TryGetComponent(out ICollectable collectable))
         {
-            if (!collider.IsTouching(playerCollider))
+            if (!collider.IsTouching(collectableCollider))
                 return;
 
-            candy.Collect(transform);
+            collectable.Collect(GetComponent<Player>());
         }
     }
 }

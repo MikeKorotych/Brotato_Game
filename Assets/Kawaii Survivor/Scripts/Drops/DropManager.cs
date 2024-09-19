@@ -12,7 +12,12 @@ public class DropManager : MonoBehaviour
     [Header(" Elements ")]
     [SerializeField] private Candy candyPrefab;
     [SerializeField] private Cash cashPrefab;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] private Chest chestPrefab;
+
+
+    [Header(" Settings ")]
+    [SerializeField][Range(0, 100)] private int cashDropChance;
+    [SerializeField][Range(0, 100)] private int chestDropChance;
 
     private void Awake()
     {
@@ -49,10 +54,19 @@ public class DropManager : MonoBehaviour
 
     private void EnemyPassedAwayCallback(Vector2 enemyPosition)
     {
-        bool shouldSpawnCash = Random.Range(0, 101) <= 30;
-
+        bool shouldSpawnCash = Random.Range(0, 101) <= cashDropChance;
+            
         DroppableCurrency droppable = shouldSpawnCash ? cashPool.Get() : candyPool.Get();
         droppable.transform.position = enemyPosition;
+
+        TryDropChest(enemyPosition);
+    }
+
+    private void TryDropChest(Vector2 spawnPosition)
+    {
+        bool shouldSpawnChest = Random.Range(0, 101) <= chestDropChance;
+        if (shouldSpawnChest)
+            Instantiate(chestPrefab, spawnPosition, Quaternion.identity);
     }
 
     private void ReleaseCandy(Candy candy) => candyPool.Release(candy);

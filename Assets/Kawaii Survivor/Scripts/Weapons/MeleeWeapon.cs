@@ -52,10 +52,7 @@ public class MeleeWeapon : Weapon
         {
             attackTimer = 0;
             StartAttack();
-        Debug.Log("--- melee weapon ---");
         }
-
-
     }
 
     private void IncrementAttackTimer()

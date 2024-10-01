@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IPlayerStatsDependency
 {
 
     [Header(" Elements ")]
@@ -9,7 +9,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rig;
 
     [Header(" Settings ")]
-    [SerializeField] private float moveSpeed = 1f;
+    [SerializeField] private float baseMoveSpeed;
+    private float moveSpeed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -22,5 +23,14 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         rig.linearVelocity = playerJoystick.GetMoveVector() * moveSpeed * Time.deltaTime;
+    }
+
+    public void UpdateStats(PlayerStatsManager playerStatsManager)
+    {
+        float moveSpeedPercent = playerStatsManager.GetStatValue(Stat.MoveSpeed) / 100;
+
+        Debug.Log("--- move speed percent: " + moveSpeedPercent + " ---");
+
+        moveSpeed = baseMoveSpeed * (1 + moveSpeedPercent);
     }
 }

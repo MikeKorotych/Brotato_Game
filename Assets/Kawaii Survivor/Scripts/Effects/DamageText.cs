@@ -9,7 +9,7 @@ public class DamageText : MonoBehaviour
     [SerializeField] private TextMeshPro damageText;
     [SerializeField] private int fontSize;
 
-    public void PlayAnimation(int damage, bool isCriticalHit)
+    public void PlayAnimation(string damage, bool isCriticalHit)
     {
         damageText.text = damage.ToString();
         damageText.color = isCriticalHit ? Color.yellow : Color.white;

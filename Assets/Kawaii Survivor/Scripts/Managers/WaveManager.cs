@@ -100,6 +100,8 @@ public class WaveManager : MonoBehaviour, IGameStateListener
         {
             Debug.Log("--- waves completed---");
             ui.UpdateWaveText("All waves completed!");
+
+            GameManager.instance.SetGameState(GameState.STAGECOMPLETE);
         }
         else
             GameManager.instance.WaveCompletedCallback();
@@ -135,6 +137,11 @@ public class WaveManager : MonoBehaviour, IGameStateListener
         {
             case GameState.GAME:
                 StartNextWave();
+                break;
+
+            case GameState.GAMEOVER:
+                isTimerOn = false;
+                DefeatAllEnemies();
                 break;
         }
     }

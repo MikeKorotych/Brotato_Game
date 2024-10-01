@@ -1,7 +1,9 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +24,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void StartGame() => SetGameState(GameState.GAME);
+    public void StartWeaponSelection() => SetGameState(GameState.WEAPONSELECTION);
     public void StartShop() => SetGameState(GameState.SHOP);
 
     public void SetGameState(GameState gameState)
@@ -32,6 +35,11 @@ public class GameManager : MonoBehaviour
         {
             gameStateListener.GameStateChangedCallback(gameState);
         }
+    }
+
+    public void ManageGameOver()
+    {
+        SceneManager.LoadScene(0);
     }
 
     public void WaveCompletedCallback()

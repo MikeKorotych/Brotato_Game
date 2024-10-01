@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public abstract class Weapon : MonoBehaviour
+public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
 {
+    [field: SerializeField] public WeaponDataSo WeaponData { get; private set; }
+
 
     [Header(" Settings ")]
     [SerializeField] public float range;
@@ -13,13 +15,20 @@ public abstract class Weapon : MonoBehaviour
 
     protected float attackTimer;
 
+
+    [Header(" Critical ")]
+    protected int criticalChance;
+    protected float criticalPercent;
+
     [Header(" Animations ")]
     [SerializeField] protected float aimLerp;
     [SerializeField] protected Animator animator;
 
+    [Header(" Level ")]
+    [field: SerializeField] public int Level { get; set; }
+
     private void Start()
     {
-
     }
 
     void Update()
@@ -85,13 +94,11 @@ public abstract class Weapon : MonoBehaviour
     {
         isCriticalHit = false;
 
-        if (Random.Range(0, 101) <= 50)
+        if (Random.Range(0, 101) <= criticalChance)
         {
             isCriticalHit = true;
-            return damage * 2;
+            return Mathf.RoundToInt(damage * criticalPercent);
         }
-
-
 
         return damage;
     }
@@ -100,5 +107,20 @@ public abstract class Weapon : MonoBehaviour
     {
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, range);
+    }
+
+    public abstract void UpdateStats(PlayerStatsManager playerStatsManager);
+
+    protected void ConfigureStats()
+    {
+        float multiplier = 1 + (float)Level / 3;
+        damage = Mathf.RoundToInt(WeaponData.GetStatValue(Stat.Attack) * multiplier);
+        attackDelay = 1 / (WeaponData.GetStatValue(Stat.AttackSpeed) * multiplier); // if WeaponData.AttackSpeed = 2 => 1/2 = 0.5s per attack (and *1.33 per lvl)
+
+        criticalChance = Mathf.RoundToInt(WeaponData.GetStatValue(Stat.CriticalChance) * multiplier - (Level / 5)); // at lvl1 => 1.33 - 0.20 => +13% crit chance per lvl
+        criticalPercent = WeaponData.GetStatValue(Stat.CriticalPercent) * multiplier;
+
+        if(WeaponData.Prefab.GetType() == typeof(RangeWeapon))
+            range = WeaponData.GetStatValue(Stat.Range) * multiplier;
     }
 }

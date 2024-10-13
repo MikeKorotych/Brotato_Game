@@ -122,15 +122,17 @@ public class PlayerHealth : MonoBehaviour, IPlayerStatsDependency
     {
         float healthPercentage = health / maxHealth;
 
-        // H меняется от 0 (красный) до 120 (зелёный)
-        float hue = healthPercentage * 120f;
-        float saturation = 1f; // Полная насыщенность
-        float value = 1f; // Полная яркость
+        // Цвета в формате RGB
+        Color greenColor = new Color(0.541f, 0.690f, 0.376f); // #8ab060
+        Color redColor = new Color(0.706f, 0.322f, 0.322f);   // #b45252
 
-        // Преобразование HSV в RGB
-        Color color = Color.HSVToRGB(hue / 360f, saturation, value);
-        sliderImage.color = color;
+        // Линейная интерполяция между зелёным и красным
+        Color sliderColor = Color.Lerp(redColor, greenColor, healthPercentage);
+
+        // Применяем цвет к слайдеру
+        sliderImage.color = sliderColor;
     }
+
 
     private void PassAway()
     {

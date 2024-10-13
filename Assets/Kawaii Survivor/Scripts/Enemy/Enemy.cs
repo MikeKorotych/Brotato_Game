@@ -93,15 +93,20 @@ public abstract class Enemy : MonoBehaviour
         if (health <= 0)
             PassAway();
     }
-    private void PassAway()
+    public void PassAway()
     {
         onPassedAway?.Invoke(transform.position);
+        PassAwayAfterWave();
+    }
 
+    public void PassAwayAfterWave()
+    {
         passAwayParticles.transform.SetParent(null);
         passAwayParticles.Play();
 
         Destroy(gameObject);
     }
+
     private void OnDrawGizmos()
     {
         if (!drawGizmos) return;

@@ -29,8 +29,6 @@ public class PlayerController : MonoBehaviour, IPlayerStatsDependency
     {
         float moveSpeedPercent = playerStatsManager.GetStatValue(Stat.MoveSpeed) / 100;
 
-        Debug.Log("--- move speed percent: " + moveSpeedPercent + " ---");
-
         moveSpeed = baseMoveSpeed * (1 + moveSpeedPercent);
     }
 }

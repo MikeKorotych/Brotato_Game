@@ -55,7 +55,6 @@ MonoBehaviour:
   attackDelay: 0.4
   aimLerp: 12
   animator: {fileID: 3061830854914842563}
-  <Level>k__BackingField: 2
   bulletPrefab: {fileID: 5678330664727400538, guid: bd5992d402c7cbe40977c2bda00e991d, type: 3}
   shootingPoint: {fileID: 7800280300146214684}
 --- !u!95 &3061830854914842563

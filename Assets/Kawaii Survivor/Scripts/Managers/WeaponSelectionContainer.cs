@@ -1,6 +1,7 @@
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class WeaponSelectionContainer : MonoBehaviour
 {
@@ -11,25 +12,42 @@ public class WeaponSelectionContainer : MonoBehaviour
     [field: SerializeField] public Button Button { get; private set; }
 
 
+    [Header(" Stats ")]
+    [SerializeField] private Transform statContainersParent;
+    [SerializeField] private StatContainer statContainersPrefab;
+
     [Header(" Color ")]
     [SerializeField] private Image[] levelDependentImages;
+    [SerializeField] private Outline outline;
 
 
-    public void Configure(Sprite sprite, string name, int level)
+    public void Configure(WeaponDataSo weaponData, int level)
     {
-        icon.sprite = sprite;
-        nameText.text = name;
+        icon.sprite = weaponData.Sprite;
+        nameText.text = weaponData.Name;
 
         Color imageColor = ColorHolder.GetColor(level);
+        //nameText.color = imageColor;
+
+        if(outline.enabled)
+            outline.effectColor = ColorHolder.GetOutlineColor(level);
 
         foreach (Image image in levelDependentImages)
             image.color = imageColor;
+
+        Dictionary<Stat, float> calculatedStats = WeaponStatsCalculator.GetStats(weaponData, level);
+        ConfigureStatContainers(calculatedStats);
+    }
+
+    private void ConfigureStatContainers(Dictionary<Stat, float> calculatedStats)
+    {
+        StatContainerManager.GenerateStatContainers(calculatedStats, statContainersParent);
     }
 
     public void Select()
     {
         LeanTween.cancel(gameObject);
-        LeanTween.scale(gameObject, Vector3.one * 1.1f, .2f).setEase(LeanTweenType.easeInOutSine);
+        LeanTween.scale(gameObject, Vector3.one * 1.1f, .2f).setEase(LeanTweenType.easeOutCubic);
     }
 
     public void Deselect()
@@ -38,4 +56,3 @@ public class WeaponSelectionContainer : MonoBehaviour
         LeanTween.scale(gameObject, Vector3.one, .2f);
     }
 }
-     

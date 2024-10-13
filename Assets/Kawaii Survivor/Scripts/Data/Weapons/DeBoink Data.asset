@@ -18,6 +18,6 @@ MonoBehaviour:
   <Prefab>k__BackingField: {fileID: 4332967323045113980, guid: e32cd97f6f144b84a9fc21d17f2423ed, type: 3}
   attack: 10
   attackSpeed: 2
-  criticalChance: 50
+  criticalChance: 10
   criticalPercent: 1.5
   range: 4

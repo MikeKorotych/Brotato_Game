@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
@@ -25,16 +26,7 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
     [SerializeField] protected Animator animator;
 
     [Header(" Level ")]
-    [field: SerializeField] public int Level { get; set; }
-
-    private void Start()
-    {
-    }
-
-    void Update()
-    {
-
-    }
+    public int Level { get; set; }
 
     protected Enemy GetClosestEnemy()
     {
@@ -113,14 +105,19 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
 
     protected void ConfigureStats()
     {
-        float multiplier = 1 + (float)Level / 3;
-        damage = Mathf.RoundToInt(WeaponData.GetStatValue(Stat.Attack) * multiplier);
-        attackDelay = 1 / (WeaponData.GetStatValue(Stat.AttackSpeed) * multiplier); // if WeaponData.AttackSpeed = 2 => 1/2 = 0.5s per attack (and *1.33 per lvl)
+        Dictionary<Stat, float> calculatedStats = WeaponStatsCalculator.GetStats(WeaponData, Level);
 
-        criticalChance = Mathf.RoundToInt(WeaponData.GetStatValue(Stat.CriticalChance) * multiplier - (Level / 5)); // at lvl1 => 1.33 - 0.20 => +13% crit chance per lvl
-        criticalPercent = WeaponData.GetStatValue(Stat.CriticalPercent) * multiplier;
+        damage          = Mathf.RoundToInt(calculatedStats[Stat.Attack]);
+        attackDelay     = 1 / calculatedStats[Stat.AttackSpeed]; // if WeaponData.AttackSpeed = 2 => 1/2 = 0.5s per attack (and *1.33 per lvl)
+        criticalChance  = Mathf.RoundToInt(calculatedStats[Stat.CriticalChance]); // at lvl1 => 1.33 - 0.20 => +13% crit chance per lvl
+        criticalPercent = calculatedStats[Stat.CriticalPercent];
+        range           = calculatedStats[Stat.Range];
+    }
 
-        if(WeaponData.Prefab.GetType() == typeof(RangeWeapon))
-            range = WeaponData.GetStatValue(Stat.Range) * multiplier;
+    internal void UpgradeTo(int targetLevel)
+    {
+        Level = targetLevel;
+
+        ConfigureStats();
     }
 }

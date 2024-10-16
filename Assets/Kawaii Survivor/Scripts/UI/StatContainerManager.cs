@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +7,7 @@ public class StatContainerManager : MonoBehaviour
 
     [Header(" Elements ")]
     [SerializeField] private StatContainer statContainer;
+    [SerializeField] private StatContainer shopStatContainer;
 
     private void Awake()
     {
@@ -17,24 +17,30 @@ public class StatContainerManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    private void GenerateContainers(Dictionary<Stat, float> statDictionary, Transform parent )
+    public void GenerateContainers(Dictionary<Stat, float> statDictionary, Transform parent, bool isShop = false)
     {
-        List<StatContainer> statContainers = new List<StatContainer>(); 
+        List<StatContainer> statContainers = new List<StatContainer>();
 
         foreach (KeyValuePair<Stat, float> kvp in statDictionary)
         {
-            StatContainer containerInstance = Instantiate(statContainer, parent);
+            StatContainer containerInstance;
+
+            if (!isShop)
+                containerInstance = Instantiate(statContainer, parent);
+            else
+                containerInstance = Instantiate(shopStatContainer, parent);
+
             statContainers.Add(containerInstance);
 
             Sprite icon = ResourcesManager.GetStatIcon(kvp.Key);
             string statName = Enums.FormatStatName(kvp.Key);
-            string statValue = kvp.Value.ToString("F1");
+            float statValue = kvp.Value;
             //string statValue = kvp.Value.ToString();
 
             containerInstance.Configure(icon, statName, statValue);
         }
 
-        LeanTween.delayedCall(Time.deltaTime * 2, () => ResizeText(statContainers));
+        //LeanTween.delayedCall(Time.deltaTime * 2, () => ResizeText(statContainers));
     }
 
     private void ResizeText(List<StatContainer> statContainers)

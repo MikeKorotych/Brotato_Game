@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ using UnityEngine;
 public class PlayerObjects : MonoBehaviour
 {
     [field: SerializeField] public List<ObjectDataSO> Objects { get; private set; }
-    [SerializeField] PlayerStatsManager playerStatsManager;
+    private PlayerStatsManager playerStatsManager;
 
     private void Awake() => playerStatsManager = GetComponent<PlayerStatsManager>();
 
@@ -20,5 +21,11 @@ public class PlayerObjects : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void AddObject(ObjectDataSO objectData)
+    {
+        Objects.Add(objectData);
+        playerStatsManager.AddObject(objectData.BaseStats);
     }
 }

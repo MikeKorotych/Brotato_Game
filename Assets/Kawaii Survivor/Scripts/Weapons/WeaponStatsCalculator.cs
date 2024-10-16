@@ -3,7 +3,7 @@ using UnityEngine;
 
 public static class WeaponStatsCalculator 
 {
-    public static Dictionary<Stat, float> GetStats(WeaponDataSo weaponData, int level)
+    public static Dictionary<Stat, float> GetStats(WeaponDataSO weaponData, int level)
     {
         float multiplier = 1 + (float)level / 4;
 
@@ -18,5 +18,10 @@ public static class WeaponStatsCalculator
         }
 
         return calculatedStats;
+    }
+
+    public static int GetPurchasePrice(WeaponDataSO weaponData, int level)
+    {
+        return level > 0 ? (int)((level + 1) * .9f  * weaponData.PurchasePrice) : weaponData.PurchasePrice;
     }
 }

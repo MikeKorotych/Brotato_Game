@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
 {
-    [field: SerializeField] public WeaponDataSo WeaponData { get; private set; }
+    [field: SerializeField] public WeaponDataSO WeaponData { get; private set; }
 
 
     [Header(" Settings ")]

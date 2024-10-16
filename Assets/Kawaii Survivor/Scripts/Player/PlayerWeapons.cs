@@ -4,13 +4,21 @@ using UnityEngine;
 public class PlayerWeapons : MonoBehaviour
 {
 
-
     [Header(" Elements ")]
     [SerializeField] private WeaponPosition[] weaponPositions;
     
-    public void AddWeapon(WeaponDataSo selectedWeapon, int weaponLevel)
-    {
 
-        weaponPositions[Random.Range(0, weaponPositions.Length)].AssignWeapon(selectedWeapon.Prefab, weaponLevel);
+    public bool TryAddWeapon(WeaponDataSO weapon, int level)
+    {
+        for (int i = 0; i < weaponPositions.Length; i++)
+        {
+            if (weaponPositions[i].Weapon != null)
+                continue;
+
+            weaponPositions[i].AssignWeapon(weapon.Prefab, level);
+            return true;
+        }
+
+        return false;
     }
 }

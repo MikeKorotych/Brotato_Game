@@ -11,8 +11,8 @@ public class WeaponSelectionManager : MonoBehaviour, IGameStateListener
 
 
     [Header(" Data ")]
-    [SerializeField] WeaponDataSo[] starterWeapons;
-    private WeaponDataSo selectedWeapon;
+    [SerializeField] WeaponDataSO[] starterWeapons;
+    private WeaponDataSO selectedWeapon;
     private int initialWeaponLevel;
 
     public void GameStateChangedCallback(GameState gameState)
@@ -23,7 +23,7 @@ public class WeaponSelectionManager : MonoBehaviour, IGameStateListener
                 if (selectedWeapon == null)
                     return;
 
-                playerWeapons.AddWeapon(selectedWeapon, initialWeaponLevel);
+                playerWeapons.TryAddWeapon(selectedWeapon, initialWeaponLevel);
                 selectedWeapon = null;
                 initialWeaponLevel = 0;
                 break;
@@ -50,7 +50,7 @@ public class WeaponSelectionManager : MonoBehaviour, IGameStateListener
         {
             WeaponSelectionContainer containerInstance = Instantiate(weaponContainerPrefab, containersParent);
 
-            WeaponDataSo weaponData = starterWeapons[Random.Range(0, starterWeapons.Length)];
+            WeaponDataSO weaponData = starterWeapons[Random.Range(0, starterWeapons.Length)];
 
             int level = Random.Range(0, 4);
 
@@ -61,7 +61,7 @@ public class WeaponSelectionManager : MonoBehaviour, IGameStateListener
         }
     }
 
-    private void WeaponSelectedCallback(WeaponSelectionContainer containerInstance, WeaponDataSo weaponData, int level)
+    private void WeaponSelectedCallback(WeaponSelectionContainer containerInstance, WeaponDataSO weaponData, int level)
     {
         selectedWeapon = weaponData;
         initialWeaponLevel = level;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Weapon Data", menuName = "ScriptableObjects/New Weapon Data", order = 0)]
-public class WeaponDataSo : ScriptableObject
+public class WeaponDataSO : ScriptableObject
 {
     [field: SerializeField] public string Name { get; private set; }
     [field: SerializeField] public Sprite Sprite { get; private set; }

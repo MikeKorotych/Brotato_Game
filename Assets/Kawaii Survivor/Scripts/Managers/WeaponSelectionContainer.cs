@@ -21,7 +21,7 @@ public class WeaponSelectionContainer : MonoBehaviour
     [SerializeField] private Outline outline;
 
 
-    public void Configure(WeaponDataSo weaponData, int level)
+    public void Configure(WeaponDataSO weaponData, int level)
     {
         icon.sprite = weaponData.Sprite;
         nameText.text = weaponData.Name;

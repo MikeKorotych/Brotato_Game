@@ -1,4 +1,4 @@
-using NaughtyAttributes.Test;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerWeapons : MonoBehaviour
@@ -6,7 +6,7 @@ public class PlayerWeapons : MonoBehaviour
 
     [Header(" Elements ")]
     [SerializeField] private WeaponPosition[] weaponPositions;
-    
+
 
     public bool TryAddWeapon(WeaponDataSO weapon, int level)
     {
@@ -20,5 +20,20 @@ public class PlayerWeapons : MonoBehaviour
         }
 
         return false;
+    }
+
+    public Weapon[] GetWeapons()
+    {
+        List<Weapon> weapons = new List<Weapon>();
+
+        foreach (WeaponPosition weaponPosition in weaponPositions)
+        {
+            if(weaponPosition.Weapon == null)
+                continue;
+
+            weapons.Add(weaponPosition.Weapon);
+        }
+
+        return weapons.ToArray();
     }
 }

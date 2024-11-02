@@ -17,15 +17,21 @@ public class PlayerObjects : MonoBehaviour
             playerStatsManager.AddObject(objectData.BaseStats);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void AddObject(ObjectDataSO objectData)
     {
         Objects.Add(objectData);
         playerStatsManager.AddObject(objectData.BaseStats);
+    }
+
+    public void RecycleObject(ObjectDataSO objectData)
+    {
+        // Remove object from list
+        Objects.Remove(objectData);
+
+        // get the money from the currency manager
+        CurrencyManager.instance.AddCurrency(objectData.RecyclePrice);
+
+        // remove the object stats from player stats manager
+        playerStatsManager.RemoveObjectStats(objectData.BaseStats);
     }
 }

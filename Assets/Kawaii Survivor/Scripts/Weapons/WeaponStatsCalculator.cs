@@ -24,4 +24,9 @@ public static class WeaponStatsCalculator
     {
         return level > 0 ? (int)((level + 1) * .9f  * weaponData.PurchasePrice) : weaponData.PurchasePrice;
     }
+
+    public static int GetRecyclePrice(WeaponDataSO weaponData, int level)
+    {
+        return (int)(GetPurchasePrice(weaponData, level) * .75f);
+    }
 }

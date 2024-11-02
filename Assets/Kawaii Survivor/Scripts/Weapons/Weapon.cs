@@ -114,10 +114,17 @@ public abstract class Weapon : MonoBehaviour, IPlayerStatsDependency
         range           = calculatedStats[Stat.Range];
     }
 
-    internal void UpgradeTo(int targetLevel)
+    public void UpgradeTo(int targetLevel)
     {
         Level = targetLevel;
 
         ConfigureStats();
     }
+
+    public int GetRecyclePrice()
+    {
+        return WeaponStatsCalculator.GetRecyclePrice(WeaponData, Level);
+    }
+
+    public void Upgrade() => UpgradeTo(Level + 1);
 }

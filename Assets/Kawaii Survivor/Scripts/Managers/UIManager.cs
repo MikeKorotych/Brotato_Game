@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,27 +15,41 @@ public class UIManager : MonoBehaviour, IGameStateListener
     [SerializeField] private GameObject waveTransitionPanel;
     [SerializeField] private GameObject shopPanel;
     [SerializeField] private GameObject darkPanel;
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private GameObject restartConformaionPanel;
 
     private List<GameObject> panels = new List<GameObject>();
 
     private void Awake()
     {
-        panels.AddRange(new GameObject[] 
-        { 
-            menuPanel, 
+        panels.AddRange(new GameObject[]
+        {
+            menuPanel,
             weaponSelectionPanel,
             gamePanel,
             gameOverPanel,
             stageCompletePanel,
-            waveTransitionPanel, 
+            waveTransitionPanel,
             shopPanel,
         });
+
+        GameManager.onGamePaused += GamePausedCallback;
+        GameManager.onGameResumed += GameResumedCallback;
+
+        pausePanel.SetActive(false);
+        HideRestartConformaionPanel();
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.onGamePaused -= GamePausedCallback;
+        GameManager.onGameResumed -= GameResumedCallback;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -85,5 +100,24 @@ public class UIManager : MonoBehaviour, IGameStateListener
     {
         foreach (GameObject _panel in panels)
             _panel.SetActive(_panel == panel);
+    }
+
+    private void GamePausedCallback()
+    {
+        pausePanel.SetActive(true);
+    }
+
+    private void GameResumedCallback()
+    {
+        pausePanel.SetActive(false);
+    }
+
+    public void ShowRestartConformaionPanel()
+    {
+        restartConformaionPanel.SetActive(true);
+    }
+    public void HideRestartConformaionPanel()
+    {
+        restartConformaionPanel.SetActive(false);
     }
 }

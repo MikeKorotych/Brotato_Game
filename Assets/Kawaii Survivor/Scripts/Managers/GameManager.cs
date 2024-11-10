@@ -9,6 +9,11 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+
+    [Header(" Actions ")]
+    public static Action onGamePaused;
+    public static Action onGameResumed;
+
     private void Awake()
     {
         if (instance == null)
@@ -40,6 +45,24 @@ public class GameManager : MonoBehaviour
     public void ManageGameOver()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void PauseButtonCallback()
+    {
+        Time.timeScale = 0f;
+        onGamePaused?.Invoke();
+    }
+
+    public void ResumeButtonCallback()
+    {
+        Time.timeScale = 1f;
+        onGameResumed?.Invoke();
+    }
+
+    public void RestartFromPause()
+    {
+        Time.timeScale = 1f;
+        ManageGameOver();
     }
 
     public void WaveCompletedCallback()

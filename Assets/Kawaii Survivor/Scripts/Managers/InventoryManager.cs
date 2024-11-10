@@ -11,6 +11,8 @@ public class InventoryManager : MonoBehaviour, IGameStateListener
 
     [Header(" Elements ")]
     [SerializeField] private Transform intventoryItemsParent;
+    [SerializeField] private Transform pauseIntventoryItemsParent;
+    [SerializeField] private Transform gameOverIntventoryItemsParent;
     [SerializeField] private InventoryItemContainer inventoryItemContainer;
     [SerializeField] private ShopManagerUI shopManagerUI;
     [SerializeField] private InventoryItemInfo itemInfo;
@@ -19,23 +21,30 @@ public class InventoryManager : MonoBehaviour, IGameStateListener
     {
         ShopManager.onItemPurchased += ItemPurchasedCallback;
         WeaponMerger.onMerge += WeaponMergedCallback;
+        GameManager.onGamePaused += GamePausedCallback;
     }
 
     private void OnDestroy()
     {
         ShopManager.onItemPurchased -= ItemPurchasedCallback;
         WeaponMerger.onMerge -= WeaponMergedCallback;
+        GameManager.onGamePaused -= GamePausedCallback;
     }
 
     public void GameStateChangedCallback(GameState gameState)
     {
         if (gameState == GameState.SHOP)
             Configure();
+
+        if (gameState == GameState.GAMEOVER)
+            Configure();
     }
 
     private void Configure()
     {
         intventoryItemsParent.Clear();
+        pauseIntventoryItemsParent.Clear();
+        gameOverIntventoryItemsParent.Clear();
 
         Weapon[] weapons = playerWeapons.GetWeapons();
 
@@ -45,9 +54,15 @@ public class InventoryManager : MonoBehaviour, IGameStateListener
                 continue;
 
             Weapon weapon = weapons[i];
-            InventoryItemContainer inventoryItem = Instantiate(inventoryItemContainer, intventoryItemsParent);
 
+            InventoryItemContainer inventoryItem = Instantiate(inventoryItemContainer, intventoryItemsParent);
             inventoryItem.Configure(weapon, i, () => ShowItemInfo(inventoryItem));
+
+            InventoryItemContainer pauseInventoryItem = Instantiate(inventoryItemContainer, pauseIntventoryItemsParent);
+            pauseInventoryItem.Configure(weapon, i, null);
+
+            InventoryItemContainer gameOverinventoryItem = Instantiate(inventoryItemContainer, gameOverIntventoryItemsParent);
+            gameOverinventoryItem.Configure(weapon, i, null);
         }
 
 
@@ -56,8 +71,13 @@ public class InventoryManager : MonoBehaviour, IGameStateListener
         foreach (var objectData in objectDatas)
         {
             InventoryItemContainer inventoryItem = Instantiate(inventoryItemContainer, intventoryItemsParent);
-
             inventoryItem.Configure(objectData, () => ShowItemInfo(inventoryItem));
+
+            InventoryItemContainer pauseInventoryItem = Instantiate(inventoryItemContainer, pauseIntventoryItemsParent);
+            pauseInventoryItem.Configure(objectData, null);
+
+            InventoryItemContainer gameOverinventoryItem = Instantiate(inventoryItemContainer, gameOverIntventoryItemsParent);
+            gameOverinventoryItem.Configure(objectData, null);
         }
     }
 
@@ -112,6 +132,8 @@ public class InventoryManager : MonoBehaviour, IGameStateListener
     }
 
     private void ItemPurchasedCallback() => Configure();
+
+    private void GamePausedCallback() => Configure();
 
     private void WeaponMergedCallback(Weapon mergedWeapon)
     {
